@@ -477,6 +477,9 @@ markSomatics = function(variants, normalVariants, individuals, normals, cpus=1, 
     
     somaticP = (1-pPolymorphic)*(1-pNormalFreq)*normalOK*pSampleOK*(1-pZero)*
                notInNormal*lowFrequencyPenalty*lowCoveragePenalty*fewVariantReadsPenalty*(1-censor)
+    # cu custom code - make somaticP = 0.99 for all BTK C481 bases if any present
+    btk = q$x %in% c(2981644449, 2981644450, 2981644451)
+    somaticP[btk] = 0.99 # end of custom cu code
     if ( any(is.na(somaticP)) ) {
     	warning(sum(is.na(somaticP)),' NA somaticPs.')
     	catLog('\nWARNING: ', sum(is.na(somaticP)),' NA somaticPs. Setting to 0 and continuing. Details on first NA:\n', sep='')
