@@ -497,7 +497,14 @@ specificXValues <- c(2981644449, 2981644450, 2981644451) # these are the coordin
  
     variants$variants[[name]]$somaticP = 0
     variants$variants[[name]]$somaticP[use] = somaticP
-    variants$variants[[name]]$somaticP[q$x %in% specificXValues] = 0.99 # BTK C481 variants will be kept in stories?
+					       
+    # fixing somaticP for BTK minor variants
+    specificXIndices = which(variants$variants[[name]]$x %in% specificXValues)
+    variants$variants[[name]]$somaticP[specificXIndices] = 0.99
+
+    # dropping Mv flag for BTK variants
+    variants$variants[[name]]$flag[specificXIndices] = ''
+					       
     catLog('got roughly ', sum(variants$variants[[name]]$somaticP > 0.5), ' somatic variants.\n', sep='')
   }
 
